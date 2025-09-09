@@ -4,17 +4,16 @@ export const errorHandler = (err, req, res, next) => {
 
   console.error('Error:', err);
 
-  // Mongoose bad ObjectId
+ 
   if (err.name === 'CastError') {
     const message = 'Resource not found';
     error = { message, statusCode: 404 };
   }
 
-  // Mongoose duplicate key
   if (err.code === 11000) {
     let message = 'Duplicate field value entered';
     
-    // Extract field name from error
+   
     const field = Object.keys(err.keyValue)[0];
     if (field === 'email') {
       message = 'Email already exists';
@@ -23,13 +22,13 @@ export const errorHandler = (err, req, res, next) => {
     error = { message, statusCode: 400 };
   }
 
-  // Mongoose validation error
+
   if (err.name === 'ValidationError') {
     const message = Object.values(err.errors).map(val => val.message).join(', ');
     error = { message, statusCode: 400 };
   }
 
-  // JWT errors
+ 
   if (err.name === 'JsonWebTokenError') {
     const message = 'Invalid token';
     error = { message, statusCode: 401 };

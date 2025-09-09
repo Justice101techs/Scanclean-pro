@@ -28,7 +28,7 @@ const ImageEnhancerPage = () => {
     if (uploadedImage) {
       setProcessing(true);
       setTimeout(() => {
-        setEnhancedImage(uploadedImage); 
+        setEnhancedImage(uploadedImage);
         setProcessing(false);
       }, 2000);
     }
@@ -104,7 +104,7 @@ const ImageEnhancerPage = () => {
               )}
             </div>
 
-            
+
             <div className="card p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2">
@@ -144,7 +144,7 @@ const ImageEnhancerPage = () => {
             </div>
           </div>
 
-          
+
           <div className="lg:col-span-2">
             <div className="card p-6 h-full">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
@@ -164,7 +164,7 @@ const ImageEnhancerPage = () => {
                     />
                   </div>
 
-                 
+
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="text-lg font-medium text-gray-900 dark:text-white">

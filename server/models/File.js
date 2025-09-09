@@ -40,7 +40,7 @@ const fileSchema = new mongoose.Schema({
     required: true,
   },
   processedData: {
-    type: mongoose.Schema.Types.Mixed, // Store OCR results, QR data, etc.
+    type: mongoose.Schema.Types.Mixed, 
     default: {},
   },
   isProcessed: {
@@ -51,7 +51,6 @@ const fileSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-// Index for efficient queries
 fileSchema.index({ userId: 1, category: 1 });
 fileSchema.index({ createdAt: -1 });
 

@@ -1,9 +1,7 @@
 import File from '../models/File.js';
 import cloudinary from '../config/cloudinary.js';
+import Tesseract from 'tesseract.js'; 
 
-// @desc    Upload file
-// @route   POST /api/files/upload
-// @access  Private
 export const uploadFile = async (req, res) => {
   try {
     if (!req.file) {
@@ -15,7 +13,6 @@ export const uploadFile = async (req, res) => {
 
     const { category = 'image-enhancement' } = req.body;
 
-    // Create file record in database
     const file = await File.create({
       userId: req.user.id,
       originalName: req.file.originalname,
@@ -50,9 +47,6 @@ export const uploadFile = async (req, res) => {
   }
 };
 
-// @desc    Get user files
-// @route   GET /api/files/list
-// @access  Private
 export const getFiles = async (req, res) => {
   try {
     const { category, page = 1, limit = 10 } = req.query;
@@ -99,9 +93,6 @@ export const getFiles = async (req, res) => {
   }
 };
 
-// @desc    Delete file
-// @route   DELETE /api/files/delete/:id
-// @access  Private
 export const deleteFile = async (req, res) => {
   try {
     const file = await File.findOne({
@@ -116,15 +107,13 @@ export const deleteFile = async (req, res) => {
       });
     }
 
-    // Delete from Cloudinary
     try {
       await cloudinary.uploader.destroy(file.cloudinaryId);
     } catch (cloudinaryError) {
       console.error('Error deleting from Cloudinary:', cloudinaryError);
-      // Continue with database deletion even if Cloudinary fails
+     
     }
 
-    // Delete from database
     await File.findByIdAndDelete(req.params.id);
 
     res.json({
@@ -140,9 +129,7 @@ export const deleteFile = async (req, res) => {
   }
 };
 
-// @desc    Process file (OCR, QR scanning, etc.)
-// @route   POST /api/files/process/:id
-// @access  Private
+
 export const processFile = async (req, res) => {
   try {
     const { processingType, options = {} } = req.body;
@@ -159,16 +146,27 @@ export const processFile = async (req, res) => {
       });
     }
 
-    // Simulate processing based on type
+   
     let processedData = {};
     
     switch (processingType) {
       case 'ocr':
-        processedData = {
-          extractedText: 'This is simulated OCR text extraction. In production, this would use a real OCR service.',
-          confidence: 0.95,
-          language: 'en',
-        };
+        try {
+       
+          const { data: { text } } = await Tesseract.recognize(file.cloudinaryUrl, 'eng');
+          processedData = {
+            extractedText: text || 'No text detected',
+            confidence: 0.95,
+            language: 'en',
+          };
+        } catch (error) {
+          console.error('OCR error:', error);
+          processedData = {
+            extractedText: 'OCR failed due to error',
+            confidence: 0,
+            language: 'en',
+          };
+        }
         break;
       case 'qr':
         processedData = {
@@ -191,7 +189,7 @@ export const processFile = async (req, res) => {
         });
     }
 
-    // Update file with processed data
+    
     file.processedData = processedData;
     file.isProcessed = true;
     await file.save();

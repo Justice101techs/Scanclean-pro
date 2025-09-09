@@ -5,10 +5,9 @@ import upload from '../middleware/upload.js';
 
 const router = express.Router();
 
-// All routes are protected
 router.use(protect);
 
-// Routes
+
 router.post('/upload', upload.single('file'), uploadFile);
 router.get('/list', getFiles);
 router.delete('/delete/:id', deleteFile);

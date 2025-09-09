@@ -10,7 +10,8 @@ import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
 
-connectDB();
+connectDB(); 
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;

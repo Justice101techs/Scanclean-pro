@@ -29,7 +29,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:4000',
+  origin: ['https://scan-clean-app.netlify.app/'],
   credentials: true,
 }));
 

@@ -10,7 +10,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
 
-connectDB(); 
+connectDB();
 
 
 const app = express();
@@ -19,17 +19,21 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
-  max: 100, 
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
 });
 
 app.use(limiter);
+const allowedOrigins = [
+  "http://localhost:4000",
 
+  " https://scan-clean-app.netlify.app",
+];
 app.use(cors({
-  origin: ['https://scan-clean-app.netlify.app/'],
+  origin: allowedOrigins,
   credentials: true,
 }));
 
@@ -40,8 +44,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/files', fileRoutes);
 
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     message: 'ScanClean server is running',
     timestamp: new Date().toISOString()
   });

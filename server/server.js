@@ -32,8 +32,9 @@ const allowedOrigins = [
 
   " https://scan-clean-app.netlify.app",
 ];
-app.use(cors({
+app.options("*",cors({
   origin: allowedOrigins,
+  methods:["GET","POST","PUT","DELETE","OPTIONS"],
   credentials: true,
 }));
 

@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL:"https://scanclean-backend.onrender.com"
+    baseURL:import.meta.env.VITE_API_URL,
     withCredentials:true,
 });
 
-export default instances;
+export default instance;
